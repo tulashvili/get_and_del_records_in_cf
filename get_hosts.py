@@ -1,14 +1,13 @@
 import requests
-import json
 import os
 from dotenv import load_dotenv
 
-# Загружаем переменные окружения
+# load env var
 load_dotenv()
 
 datshost_zone_id = os.getenv("CLOUDFLARE_MY_INFRA_ZONE_ID")
 
-# URL и заголовки
+# URL and headers
 url = f"https://api.cloudflare.com/client/v4/zones/{datshost_zone_id}/dns_records"
 headers = {
     "Content-Type": "application/json",
@@ -16,30 +15,45 @@ headers = {
     "X-Auth-Key": os.getenv("CLOUDFLARE_API_KEY_MY_INFRA")
 }
 
-# Параметры для пагинации
-page = 1
-per_page = 50  # Количество записей на странице
+input_your_host = input('Введи хост или его часть:')
 
-while True:
-    # Формируем URL с пагинацией
-    paginated_url = f"{url}?page={page}&per_page={per_page}"
+def check_records(input_your_host):
+    # param for pagination
+    page = 1
+    per_page = 50  # records on the page
+    dns_records = []  # storage list for dns-records 
 
-    # Выполняем запрос к API
-    response = requests.get(paginated_url, headers=headers)
+    while True:
+        # make url with pagination
+        paginated_url = f"{url}?page={page}&per_page={per_page}"
 
-    if response.status_code == 200:
-        data = response.json()  # Разбираем ответ JSON
-        for hosts in data["result"]:
-            if "switcherry" in hosts["name"] and "vpn" in hosts["name"] and not "blog" in hosts["name"]:
-                print(f'{{ name = "{hosts["name"]}", value = "{hosts["content"]}" }},')
-            # print(hosts)
+        # get request to API
+        response = requests.get(paginated_url, headers=headers)
 
-        # Проверяем, есть ли следующая страница
-        result_info = data.get("result_info", {})
-        if "total_pages" in result_info and page < result_info["total_pages"]:
-            page += 1  # Переходим к следующей странице
+        if response.status_code == 200:
+            data = response.json()  # parse json response
+            for record in data["result"]:
+                if input_your_host in record["name"]:  # filter by input_your_host
+                    dns_records.append({
+                        "id": record["id"],
+                        "name": record["name"],
+                        "content": record["content"]
+                    })
+            # format output for paste in terraform
+            for record in dns_records:
+                print(f'{{ name = "{record["name"]}", value = "{record["content"]}", id = "{record["id"]}" }}')
+
+            # check next page
+            result_info = data.get("result_info", {})
+            if "total_pages" in result_info and page < result_info["total_pages"]:
+                page += 1  # move to next page
+            else:
+                break  # next page is not, cycle is breaking
         else:
-            break  # Нет следующей страницы, выходим из цикла
-    else:
-        print(f"Ошибка: {response.status_code}, {response.text}")
-        break
+            print(f"Ошибка: {response.status_code}, {response.text}")
+            break
+    
+    return len(dns_records)
+
+check_records(input_your_host)
+
