@@ -38,7 +38,9 @@ while True:
                     "name": record["name"],
                     "content": record["content"]
                 })
-        print(dns_records)
+        # format output for paste in terraform
+        for record in dns_records:
+            print(f'{{ name = "{record["name"]}", value = "{record["content"]}", id = "{record["id"]}" }}')
 
         # check next page
         result_info = data.get("result_info", {})
