@@ -5,14 +5,14 @@ from dotenv import load_dotenv
 # load env var
 load_dotenv()
 
-datshost_zone_id = os.getenv("CLOUDFLARE_MY_INFRA_ZONE_ID")
+datshost_zone_id = os.getenv("CLOUDLFARE_ZONE_ID_PROD")
 
 # URL and headers
 url = f"https://api.cloudflare.com/client/v4/zones/{datshost_zone_id}/dns_records"
 headers = {
     "Content-Type": "application/json",
-    "X-Auth-Email": os.getenv("CLOUDFLARE_EMAIL_MY_INFRA"),
-    "X-Auth-Key": os.getenv("CLOUDFLARE_API_KEY_MY_INFRA")
+    "X-Auth-Email": os.getenv("CLOUDFLARE_EMAIL_PROD"),
+    "X-Auth-Key": os.getenv("CLOUDFLARE_API_KEY_PROD")
 }
 
 input_your_host = input('Введи хост или его часть:')
