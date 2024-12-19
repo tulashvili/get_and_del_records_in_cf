@@ -1,23 +1,20 @@
-import get_hosts
-import del_hosts
+import get_and_del_hosts
 
 def main():
-    dns_records = get_hosts.check_records(get_hosts.input_your_host)  # save result
-
-    if dns_records:  # check result
+    # save result
+    dns_records = get_and_del_hosts.check_records(get_and_del_hosts.input_your_host)
+    
+    if dns_records:
         print("Записи найдены!")
         while True:
-            input_your_answer = input('Вы хотите УДАЛИТЬ найденные записи?: ').strip().upper()
-
+            input_your_answer = input("Вы хотите УДАЛИТЬ найденные записи (ДА или НЕТ)?: ")
+            
             if input_your_answer == "ДА":
-                del_hosts.del_records(get_hosts.dns_records)
-                break  # stop cycle
+                get_and_del_hosts.del_records(dns_records)
             elif input_your_answer == "НЕТ":
-                print("Окей")
-                break # stop cycle
-            else:
-                print("Неверный ввод. Попробуйте снова (Введите ДА ИЛИ НЕТ).")
+                print (dns_records)
+            break
     else:
-        print("Записей не найдено.")
+        print("Записи не найдены или ")
 
 main()

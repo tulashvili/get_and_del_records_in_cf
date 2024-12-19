@@ -48,12 +48,21 @@ def check_records(input_your_host):
             if "total_pages" in result_info and page < result_info["total_pages"]:
                 page += 1  # move to next page
             else:
-                break  # next page is not, cycle is breaking
+                break  # if next page is not, cycle is breaking
         else:
             print(f"Ошибка: {response.status_code}, {response.text}")
             break
     
-    return len(dns_records)
+    return dns_records
 
-check_records(input_your_host)
+def del_records(dns_records):
+    for record in dns_records:
+        delete_url = f"https://api.cloudflare.com/client/v4/zones/{datshost_zone_id}/dns_records/{record['id']}"
+        
+        del_response = requests.delete(delete_url, headers=headers)
+        
+        if del_response.status_code == 200:
+            print(f"Удалено: {record['name']} ({record['content']})")
+        else:
+            print(f"Ошибка удаления записи {record['name']}: {del_response.status_code}, {del_response.text}")
 
