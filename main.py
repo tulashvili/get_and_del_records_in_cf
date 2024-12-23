@@ -2,7 +2,7 @@ import get_and_del_hosts
 
 def main():
     # save result
-    dns_records = get_and_del_hosts.check_records(get_and_del_hosts.input_your_host)
+    dns_records = get_and_del_hosts.check_records(get_and_del_hosts.search_words)
     
     if dns_records:
         print("Записи найдены!")

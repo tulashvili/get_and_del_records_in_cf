@@ -1,9 +1,14 @@
 import requests
 import os
 from dotenv import load_dotenv
+import re
 
 # load env var
 load_dotenv()
+
+# input words and split them to list
+regex_pattern = input("Введите слова для поиска в имени хоста (разделяйте пробелами): ").strip()
+search_words = regex_pattern.split()
 
 datshost_zone_id = os.getenv("CLOUDLFARE_ZONE_ID_PROD")
 
@@ -15,9 +20,7 @@ headers = {
     "X-Auth-Key": os.getenv("CLOUDFLARE_API_KEY_PROD")
 }
 
-input_your_host = input('Введи хост или его часть:')
-
-def check_records(input_your_host):
+def check_records(search_words):
     # param for pagination
     page = 1
     per_page = 50  # records on the page
@@ -33,7 +36,8 @@ def check_records(input_your_host):
         if response.status_code == 200:
             data = response.json()  # parse json response
             for record in data["result"]:
-                if input_your_host in record["name"]:  # filter by input_your_host
+                # filter result by words
+                if all(word.lower() in record["name"].lower() for word in search_words):
                     dns_records.append({
                         "id": record["id"],
                         "name": record["name"],
@@ -65,4 +69,3 @@ def del_records(dns_records):
             print(f"Удалено: {record['name']} ({record['content']})")
         else:
             print(f"Ошибка удаления записи {record['name']}: {del_response.status_code}, {del_response.text}")
-
