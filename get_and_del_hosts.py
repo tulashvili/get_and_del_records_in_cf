@@ -43,9 +43,6 @@ def check_records(search_words):
                         "name": record["name"],
                         "content": record["content"]
                     })
-            # format output for paste in terraform
-            for record in dns_records:
-                print(f'{{ name = "{record["name"]}", value = "{record["content"]}", id = "{record["id"]}" }}')
 
             # check next page
             result_info = data.get("result_info", {})
