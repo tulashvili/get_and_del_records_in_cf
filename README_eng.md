@@ -2,12 +2,15 @@
 
 ## What the script is for
 
-This script is used to get from cloudlfare `id`, `content` and `id` records and delete them, if necessary.
+This script is designed to retrieve `id`, `content` and `id` records from cloudlfare and delete them if necessary.
+It also knows how to search for needed records like `grep` in linux - you just type in two keywords over a space and it will provide you with all existing records from Cloudflare.
+Below is a demonstration of how it works:
+![alt text](<2024-12-26 10-31-31.gif>)
 
 ## How to use
 
 1. `git clone <repo>`.
-2. Create a `.env` folder and insert **identical lines**:
+2. Create `.env` folder and insert **identical lines**:
 
 `CLOUDLFARE_ZONE_ID_PROD` = it can be found [here](https://developers.cloudflare.com/fundamentals/setup/find-account-and-zone-ids/)
 
@@ -30,5 +33,3 @@ CLOUDLFARE_ZONE_ID_PROD = 1a2a33564362fs
 
 - Integration with vault to view records without manually entering `API_KEY` and `ZONE_ID`.
 - Web version
-
-Translated with DeepL.com (free version)
