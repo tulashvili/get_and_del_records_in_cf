@@ -4,7 +4,7 @@ def main():
     # save result
     dns_records = get_and_del_hosts.check_records(get_and_del_hosts.search_words)
     for record in dns_records:
-        print(f'{{ name = "{record["name"]}", value = "{record["content"]}", id = "{record["id"]}" }}')
+        print(f'{{ name = "{record["name"]}", value = "{record["content"]}"}}')
 
     if dns_records:
         print("Записи найдены!")
@@ -13,6 +13,7 @@ def main():
             
             if input_your_answer == "ДА":
                 get_and_del_hosts.del_records(dns_records)
+                break
             elif input_your_answer == "НЕТ":
                 break
     else:
