@@ -1,4 +1,4 @@
-[ENG](README_eng.md)
+[ENG](README.md)
 
 ## Для чего скрипт
 
