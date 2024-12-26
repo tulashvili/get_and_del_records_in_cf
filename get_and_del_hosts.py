@@ -10,14 +10,14 @@ load_dotenv()
 regex_pattern = input("Введите слова для поиска в имени хоста (разделяйте пробелами): ").strip()
 search_words = regex_pattern.split()
 
-datshost_zone_id = os.getenv("CLOUDLFARE_ZONE_ID_PROD")
+datshost_zone_id = os.getenv("CLOUDFLARE_ZONE_ID_SWEECH-TECH")
 
 # URL and headers
 url = f"https://api.cloudflare.com/client/v4/zones/{datshost_zone_id}/dns_records"
 headers = {
     "Content-Type": "application/json",
-    "X-Auth-Email": os.getenv("CLOUDFLARE_EMAIL_PROD"),
-    "X-Auth-Key": os.getenv("CLOUDFLARE_API_KEY_PROD")
+    "X-Auth-Email": os.getenv("CLOUDFLARE_EMAIL_SWEECH-TECH"),
+    "X-Auth-Key": os.getenv("CLOUDFLARE_API_KEY_SWEECH-TECH")
 }
 
 def check_records(search_words):
